@@ -18,10 +18,15 @@ class Author(models.Model):
     def __str__(self) -> str:
         return f"{self.first_name} {self.last_name}"
 
+    def display_books(self) -> str:
+        return ', '.join(book.title for book in self.books.all())
+    display_books.short_description = 'books'
+
     class Meta:# aprasomas papild funkcionalumas kreipimuisi i DB
         ordering = ['last_name', 'first_name']
         #ordering yra rusiavimas, nurodomas, kaip sarasas []
         #rusiuoja pagal pavarde, paskui varda
+        #class Meta aprasomoji klase klaseje
 
 
 class Book(models.Model):
@@ -29,7 +34,7 @@ class Book(models.Model):
     summary = models.TextField('summary')#textField, bus tuscias didelis laukas, neribotas kiekis simboliu
     isbn = models.CharField('ISBN', max_length=13, null=True, blank=True,
         help_text='<a href="https://www.isbn-international.org/content/what-isbn" target="_blank">ISBN code</a> consisting of 13 symbols')
-    author = models.ForeignKey(Author, on_delete=models.SET_NULL, null=True, blank=True)
+    author = models.ForeignKey(Author, on_delete=models.SET_NULL, null=True, blank=True, related_name ='books')
     genre = models.ManyToManyField(Genre, help_text='Choose genre(s) for this book', verbose_name='genre(s)')
     # null=True ir blank=True leidzia palikti laukeli tuscia is ISBN
     #null=True yra nuoroda BD
@@ -39,9 +44,14 @@ class Book(models.Model):
     #SET_NULL - jeigu istrinsim Author, jam bus priskirtos null reiksmes
     #PROTECT - neleis istrinti Author, jeigu jis turi knygu
     #CASCADE - jeigu trinsi Author, istrins ir jo knygas
-    #verbose_name - gali buti vns ar dgs
+    #verbose_name - gali buti vns ar dgs, nusirodo papildomai foreignkey
     def __str__(self) -> str:
         return f"{self.author} {self.title}"
+
+    def display_genre(self) -> str:
+        return ', '.join(genre.name for genre in self.genre.all()[:3])
+    display_genre.short_description = 'genre'
+        #', ' naudojamas kai bus daugiau negu 2 zanrai
 
 
 class BookInstance(models.Model):
@@ -64,7 +74,7 @@ class BookInstance(models.Model):
     status = models.CharField('status', max_length=1, choices=LOAN_STATUS, default='m')
     #choices - sukuria pasirinkimu laukeli
     #max_length1 - DB saugosim tik 1 simboli
-    price = models.DecimalField('price', max_digits=18, decimal_places=2)
+    #price = models.DecimalField('price', max_digits=18, decimal_places=2)
     #max_digits - kiek max skaitmenu skaiciuje
     #decimal_places - kiek skaiciu po kablelio
 
