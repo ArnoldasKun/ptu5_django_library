@@ -20,10 +20,12 @@ class Author(models.Model):
 
     def display_books(self) -> str:
         return ', '.join(book.title for book in self.books.all())
-    display_books.short_description = 'books'
+    display_books.short_description = 'books'#padaro trumpa lauko pavadinima
 
     class Meta:# aprasomas papild funkcionalumas kreipimuisi i DB
         ordering = ['last_name', 'first_name']
+        #verbose_name = 'Author'
+        #verbose_name_plural = 'Authors'
         #ordering yra rusiavimas, nurodomas, kaip sarasas []
         #rusiuoja pagal pavarde, paskui varda
         #class Meta aprasomoji klase klaseje
@@ -34,7 +36,12 @@ class Book(models.Model):
     summary = models.TextField('summary')#textField, bus tuscias didelis laukas, neribotas kiekis simboliu
     isbn = models.CharField('ISBN', max_length=13, null=True, blank=True,
         help_text='<a href="https://www.isbn-international.org/content/what-isbn" target="_blank">ISBN code</a> consisting of 13 symbols')
-    author = models.ForeignKey(Author, on_delete=models.SET_NULL, null=True, blank=True, related_name ='books')
+    author = models.ForeignKey(
+        Author, on_delete=models.SET_NULL, 
+        null=True, blank=True, 
+        related_name ='books')
+    #related_name - parodo kokias knygas parase autoriai
+    #pasirasom funkc i Author def display_books
     genre = models.ManyToManyField(Genre, help_text='Choose genre(s) for this book', verbose_name='genre(s)')
     # null=True ir blank=True leidzia palikti laukeli tuscia is ISBN
     #null=True yra nuoroda BD
@@ -49,9 +56,11 @@ class Book(models.Model):
         return f"{self.author} {self.title}"
 
     def display_genre(self) -> str:
+        #si eilute grazina genre sarasa per kableli iki 3
         return ', '.join(genre.name for genre in self.genre.all()[:3])
     display_genre.short_description = 'genre'
         #', ' naudojamas kai bus daugiau negu 2 zanrai
+        #[:3] apribojimas ima iki 3 genre
 
 
 class BookInstance(models.Model):

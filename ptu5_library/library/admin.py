@@ -4,33 +4,51 @@ from . import models
 # Register your models here.
 
 class BookInstanceInline(admin.TabularInline):
+    #kad butu galima matyti ir redaguoti visus instance, tam reikia inline
+    #ir aprasom inlines i BookAdmin
     model = models.BookInstance
-    extra = 0
+    extra = 0#nusako kad dirbtinai bus sukuriama 0 instance eiluciu
     #readonly_fields = ('unique_id', )
-    can_delete = False
+    #sukuria naujus id uzsakymu lenteleje
+    can_delete = False#redaguoti permisions
 
 
 class BookAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'display_genre')
+    list_display = ('title', 'author', 'display_genre')#sukuria naujus stulpeliu pavadinimus
+    #naudoti kintamaji pavadinima is models
+    #display_genre reikia suskurti i models.py def display_genre(self)
     inlines = (BookInstanceInline, )
+    
 
 
 class BookInstanceAdmin(admin.ModelAdmin):
-    list_display = ('unique_id', 'book', 'status', 'due_back')
-    list_filter = ('status', 'due_back')
+    list_display = ('unique_id', 'book', 'status', 'due_back')#sukuria nauju stulpeliu reiksmes
+    #naudoti kintamaji pavadinima is models
+    list_filter = ('status', 'due_back')#ivardijam laukus pagal kuriuos filtruosim
     readonly_fields = ('unique_id', )
-    search_fields = ('unique_id', 'book__title', 'book__author__last_name')
-    list_editable = ('status', 'due_back')
+    #editable padaro kad nerodytu, bet readonly grazina, kad rodytu, bet neleidzia redaguoti
+    # kablelis parodo tuple ir sudaro jungima
+    search_fields = ('unique_id', 'book__title', 'book__author__last_name')#paieskos laukai
+    #book__title - 'django lookups', book yra foreignkey
+    list_editable = ('status', 'due_back')#laukai redaguojami paciame liste
 
-    fieldsets = (
+    fieldsets = (#nustato lauku tvarka, tuple tuplese
         ('General', {'fields': ('unique_id', 'book')}),
+        #general - antraste,
+        #fields - laukai, kaip diktas
+        #kad galetume naudoti 'unique_id', pasidarom readonly_fields i BookInstanceAdmin 
         ('Availability', {'fields': (('status', 'due_back'),)}),
+        #availability - antraste
+        #fields - laukai, kaip diktas
+        #papildomi () padaro horizontaliai vienoje eiluteje status ir due_back
     )
 
 
 class AuthorAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'display_books')
-    list_display_link = ('last_name', )
+    list_display = ('first_name', 'last_name', 'display_books')#sukuria naujus stulpelius
+    #naudoti kintamaji pavadinima is models
+    #display_books reikia suskurti i models.py def display_books(self)
+    list_display_link = ('last_name', )#ant kuriu stulpeliu linkai rasysis
 
 
 admin.site.register(models.Author, AuthorAdmin)
