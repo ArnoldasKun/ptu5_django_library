@@ -13,13 +13,16 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include#importuojam include
 #susiejam paths
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('library.urls'))
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
 #pirmas path ateina automatiskai
 #antras path su musu tusciu keliu, iclude importuotas ir nurodom
 #  musu library.urls is kuriom imam
