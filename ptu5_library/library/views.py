@@ -50,24 +50,33 @@ class BookListView(ListView):#paveldi ListView
     template_name = 'library/book_list.html'
 
     def get_queryset(self):
-        queryset = super().get_queryset()
-        genre_id = self.request.GET.get('genre_id')
-        if genre_id:
+        queryset = super().get_queryset()#perimam queryset funkc
+        genre_id = self.request.GET.get('genre_id')#pasiduodam genre per GET parametra
+        #susikuriam genre_id kintamaji, panaudosim filtravimui       
+        if genre_id:#cia pasitikrinam ar filtruoja
             queryset = queryset.filter(genre__id=genre_id)
+            #genre - yra manytomany todel __ naudojami
+            #saite paieskai vykdoma per ? - 127.0.0.1:8000/books/?genre_id=1
+            # =1 - zanru id, irasius kita skaiciu, ismes kita zanra 
         return queryset
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+
+    #vienintelis budas isgauti genre pavadinimus ir skaitliuka
+    #1 = suskaiciuoti knygoms
+    #2 = isgauti genre pavadinima
+    #3 = genre context, prisideda pildant book_list.html
+    def get_context_data(self, **kwargs):#1
+        context = super().get_context_data(**kwargs)#1
         #su super pasiemam visa kontext kuri buvom iki siol 
         # suformave ir pridedam savo kintamaji.
         #context['book_count'] = Book.objects.count()#kitas variant susk. knygas
-        context['book_count'] = self.get_queryset().count()#suskaiciuojam knygas
+        context['book_count'] = self.get_queryset().count()#1#suskaiciuojam knygas
         # self.get_queryset() - grazina nurodyto objekto sarasa
-        genre_id = self.request.GET.get('genre_id')
-        context['genres'] = Genre.objects.all()
-        if genre_id:
-            context['genre'] = get_object_or_404(Genre, id=genre_id)
-        return context
+        genre_id = self.request.GET.get('genre_id')#2
+        context['genres'] = Genre.objects.all()#3
+        if genre_id:#2
+            context['genre'] = get_object_or_404(Genre, id=genre_id)#2
+        return context#1
 
 
 class BookDetailView(DetailView):

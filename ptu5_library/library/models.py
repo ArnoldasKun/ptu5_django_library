@@ -30,7 +30,12 @@ class Author(models.Model):
 
     def link(self) -> str:
         link = reverse('author', kwargs={'author_id': self.id})
+        #reverse in python == url in html
+        #reverse suformuoja adresa
         return format_html('<a href="{link}">{author}</a>', link=link, author=self.__str__())
+        #format_html - yra saugi funkcija, suformuojanm link.
+            #migraciju daryti nereikia
+        #galima padaryti author=self.author in class Book, tada nelieka <>
 
     class Meta:# aprasomas papild funkcionalumas kreipimuisi i DB
         ordering = ['last_name', 'first_name']
