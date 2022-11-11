@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView
-from django.http import HttpResponse
+#from django.http import HttpResponse
 from . models import Genre, Author, Book, BookInstance
 # Create your views here.
 
@@ -41,10 +41,11 @@ def authors(request):
 
 
 def author(request, author_id):
-    return render(request, 'library/author.html', {'author': get_object_or_404(Author,
-    id=author_id)})
+    #per author_id galesim matyti, koki authoriu norim matyti
+    return render(request, 'library/author.html', {'author': get_object_or_404(Author, id=author_id)})
+    #jeigu nerastume ogjekto, mums ismes puslapi su 404 klaida
 
-class BookListView(ListView):
+class BookListView(ListView):#paveldi ListView
     model = Book
     template_name = 'library/book_list.html'
 
@@ -57,8 +58,11 @@ class BookListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        #context['book_count'] = Book.objects.count()
-        context['book_count'] = self.get_queryset().count()
+        #su super pasiemam visa kontext kuri buvom iki siol 
+        # suformave ir pridedam savo kintamaji.
+        #context['book_count'] = Book.objects.count()#kitas variant susk. knygas
+        context['book_count'] = self.get_queryset().count()#suskaiciuojam knygas
+        # self.get_queryset() - grazina nurodyto objekto sarasa
         genre_id = self.request.GET.get('genre_id')
         context['genres'] = Genre.objects.all()
         if genre_id:

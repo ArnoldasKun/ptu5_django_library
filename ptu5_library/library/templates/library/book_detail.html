@@ -6,8 +6,8 @@
     {% if object.isbn %}
         <p>ISBN: {{ object.isbn }}</p>
     {% endif %}
-    {% if object.genre%}
-        <p>Genres:
+    {% if object.genre %}
+        <p>Genres:{# comment #} {{ object.genre.all|join:", "}} {# comment #}
             {% for genre in object.genre.all %}
                 {{ genre.link_filtered_books }}
             {% endfor %}
