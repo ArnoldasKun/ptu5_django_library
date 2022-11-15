@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %} Library{% endblock title %}</title>
     <link rel="stylesheet" href="{% static 'library/css/base.css' %}">
@@ -16,7 +16,16 @@
                 <a href="{% url 'index' %}">Home</a>
                 <a href="{% url 'authors' %}">Authors</a>
                 <a href="{% url 'books' %}">Books</a>
-                <a href="{% url 'admin:index' %}">Admin</a>
+                <span class="spacer"></span>
+                {% if user.is_authenticated %}
+                    <span>{{ user }}</span>
+                    {% if user.is_superuser or user.is_staff %}
+                        <a href="{% url 'admin:index' %}">Admin</a>
+                    {% endif %}
+                    <a href="{% url 'logout' %}">Logout</a>
+                {% else %}                   
+                    <a href="{% url 'login' %}?next={{ request.path }}">Login</a>
+                {% endif %}               
             {% endblock nav %}
         </div>
     </header> 
