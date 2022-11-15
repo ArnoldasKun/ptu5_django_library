@@ -20,6 +20,8 @@ def index(request):
     book_instances_available_count = BookInstance.objects.filter(status='a').count()#kiek avalaible knygu
     # status = 'a' - available
     author_count = Author.objects.count()#kiek autoriu
+    visits_count = request.session.get('visits_count', 1)
+    request.session['visits_count'] = visits_count + 1
 
     #context - obj, kuri pasiduoda i templates
     context = {
@@ -27,7 +29,8 @@ def index(request):
         'book_instances_count': book_instances_count,
         'book_instances_available_count': book_instances_available_count,
         'author_count': author_count,
-        'genre_count': Genre.objects.count()#zanrus pasiduodam cia, tokiu budu
+        'genre_count': Genre.objects.count(),#zanrus pasiduodam cia, tokiu budu
+        'visits_count': visits_count,
 
     }
 
