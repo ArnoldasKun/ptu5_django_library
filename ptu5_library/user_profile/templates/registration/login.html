@@ -1,5 +1,5 @@
 {% extends 'library/base.html' %}
-{% block title %}Login to {% endblock title %}
+{% block title %}Login to {{ block.super }}{% endblock title %}
 {% block content %}
 <h1>Login to library</h1>
 {% if form.errors %}
