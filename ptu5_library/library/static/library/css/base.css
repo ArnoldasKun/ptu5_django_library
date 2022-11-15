@@ -86,3 +86,51 @@ ul li a:hover {
 ul li:hover {
     background-color: rgba(255, 255, 255, 0.2);
 }
+
+.paginator {
+    margin: 0.5rem;
+}
+
+.paginator a, .paginator span {
+    display: inline-block;
+    padding: 0.25rem;
+    margin: 1px;
+    text-decoration: none;
+    border: 1px solid #ccc;
+    border-radius: 1rem;
+}
+
+.paginator span {
+    background-color: #236;
+    color: #fff;
+
+}
+
+.paginator a {
+    background-color: #fff;
+}
+
+.paginator form {
+    display: inline-block;
+}
+
+ul.book_list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+ul.book_list li.book {
+    flex-basis: 10rem;
+    border: 1px solid #999;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 0;
+}
+
+ul.book_list li.book.img {
+    max-width: 100%;
+}
+ul.book_list li.book h3 {
+    margin-top: 0;
+}

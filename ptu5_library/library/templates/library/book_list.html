@@ -1,9 +1,25 @@
 {% extends 'library/base.html' %}
+{% load static %}
 {% block title %}Books in {{ block.super }}{% endblock title %}
 {% block content  %}
     <h1>{{ book_count }} 
         {% if genre %}{{ genre }}{% endif %}
         Books</h1>
+    <div class='paginator'>
+        {% if page_obj.has_previous %}
+            <a href="?{% if request.GET.query %}search={{ request.GET.query }}&{% endif %}page1">&#11120;</a>
+            <a href="?{% if request.GET.query %}search={{ request.GET.query }}&{% endif %}page={{ page_obj.previous_page_number }}">&#129120;</a>
+        {% endif %}
+        {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+        {% if page_obj.has_next %}
+        <a href="?{% if request.GET.query %}search={{ request.GET.query }}&{% endif %}page={{ page_obj.next_page_number }}">&#129122;</a>
+        <a href="?{% if request.GET.query %}search={{ request.GET.query }}&{% endif %}page={{ page_obj.paginator.num_pages }}">&#11122;</a>
+        {% endif %}
+        <form action="{% url 'books' %}" method="get">
+            <input type="text" name="query" value="{{ request.GET.query }}">
+            <button type="submit">search</button>
+        </form>
+    </div>
     <div class="genre_filter">
         <h3>Available Genres</h3>
         <ul>
@@ -13,9 +29,19 @@
             {% endfor %}
         </ul>
     </div>
-    <ul>
+    <ul class="book_list">
         {% for book in book_list %}
-        <li><a href="{% url 'book' book.pk %}">{{ book.title }}</a> - {{ book.author.link }}</li>
+            <li class='book'>
+                <a href="{% url 'book' book.pk %}">
+                    {% if book.cover %}
+                        <img src="{{ book.cover.url }}">
+                    {% else %}
+                        <img src="{% static 'library/img/ietis.jpg' %}">
+                    {% endif %}
+                    <h3>{{ book.title }}</h3>
+                </a>
+                <p>by {{ book.author.link }}</p>
+            </li>
         {% endfor %}
     </ul>
 {% endblock content  %}

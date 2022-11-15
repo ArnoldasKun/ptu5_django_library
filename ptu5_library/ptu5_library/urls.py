@@ -21,7 +21,8 @@ from django.urls import path, include#importuojam include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('library.urls'))
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
+  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 #pirmas path ateina automatiskai
 #antras path su musu tusciu keliu, iclude importuotas ir nurodom

@@ -58,6 +58,7 @@ class Book(models.Model):
     #related_name - parodo kokias knygas parase autoriai
     #pasirasom funkc i Author def display_books
     genre = models.ManyToManyField(Genre, help_text='Choose genre(s) for this book', verbose_name='genre(s)')
+    cover = models.ImageField("cover", upload_to="covers", blank=True, null=True)
     # null=True ir blank=True leidzia palikti laukeli tuscia is ISBN
     #null=True yra nuoroda BD
     #blank=True yra nuoroda adminui django, formoms

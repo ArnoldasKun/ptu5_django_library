@@ -1,3 +1,5 @@
+from django.core.paginator import Paginator
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView
 #from django.http import HttpResponse
@@ -37,7 +39,10 @@ def index(request):
     #context - visada trecias argumentas
 
 def authors(request):
-    return render(request, 'library/authors.html', {'authors': Author.objects.all()}) 
+    paginator = Paginator(Author.objects.all(), 2)
+    page_number = request.GET.get('page')
+    paged_authors = paginator.get_page(page_number)
+    return render(request, 'library/authors.html', {'authors': paged_authors}) 
 
 
 def author(request, author_id):
@@ -47,10 +52,14 @@ def author(request, author_id):
 
 class BookListView(ListView):#paveldi ListView
     model = Book
+    paginate_by = 3
     template_name = 'library/book_list.html'
 
     def get_queryset(self):
         queryset = super().get_queryset()#perimam queryset funkc
+        query = self.request.GET.get('query')
+        if query:
+            queryset = queryset.filter(Q(title__icontains=query) | Q(summary__icontains=query))
         genre_id = self.request.GET.get('genre_id')#pasiduodam genre per GET parametra
         #susikuriam genre_id kintamaji, panaudosim filtravimui       
         if genre_id:#cia pasitikrinam ar filtruoja
