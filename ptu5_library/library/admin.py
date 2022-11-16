@@ -22,22 +22,22 @@ class BookAdmin(admin.ModelAdmin):
 
 
 class BookInstanceAdmin(admin.ModelAdmin):
-    list_display = ('unique_id', 'book', 'status', 'due_back')#sukuria nauju stulpeliu reiksmes
+    list_display = ('unique_id', 'book', 'status', 'due_back', 'reader')#sukuria nauju stulpeliu reiksmes
     #naudoti kintamaji pavadinima is models
     list_filter = ('status', 'due_back')#ivardijam laukus pagal kuriuos filtruosim
-    readonly_fields = ('unique_id', )
+    readonly_fields = ('unique_id', 'is_overdue' )
     #editable padaro kad nerodytu, bet readonly grazina, kad rodytu, bet neleidzia redaguoti
     # kablelis parodo tuple ir sudaro jungima
-    search_fields = ('unique_id', 'book__title', 'book__author__last_name')#paieskos laukai
+    search_fields = ('unique_id', 'book__title', 'book__author__last_name', 'reader__last_name')#paieskos laukai
     #book__title - 'django lookups', book yra foreignkey
-    list_editable = ('status', 'due_back')#laukai redaguojami paciame liste
+    list_editable = ('status', 'due_back', 'reader')#laukai redaguojami paciame liste
 
     fieldsets = (#nustato lauku tvarka, tuple tuplese
         ('General', {'fields': ('unique_id', 'book')}),
         #general - antraste,
         #fields - laukai, kaip diktas
         #kad galetume naudoti 'unique_id', pasidarom readonly_fields i BookInstanceAdmin 
-        ('Availability', {'fields': (('status', 'due_back'),)}),
+        ('Availability', {'fields': (('status', 'due_back', 'is_overdue'), 'reader')}),
         #availability - antraste
         #fields - laukai, kaip diktas
         #papildomi () padaro horizontaliai vienoje eiluteje status ir due_back

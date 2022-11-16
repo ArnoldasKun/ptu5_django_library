@@ -158,3 +158,36 @@ table {
     border: 3px solid #900;
     background-color: #f99;
 }
+
+.table-grid {
+    display: grid;
+    padding: 0.5rem;
+}
+
+.my-books-table {
+    grid-template-columns: 2fr 1fr 1fr;
+}
+
+.table-grid-cell {
+    display: inline-block;
+    align-self: stretch;
+    background-color: rgb(171, 198, 201);
+    justify-self: stretch;
+    padding: 0.5rem;
+    border-bottom: 1px solid #999;
+}
+
+.center {
+    text-align: center;
+}
+
+.dark {
+    background-color: #569;
+    color: #eee;
+}
+
+.overdue {
+    background-color: #f99;
+    color: #900;
+    font-weight: bold;
+}
