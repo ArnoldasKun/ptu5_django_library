@@ -20,6 +20,7 @@ from django.urls import path, include#importuojam include
 #susiejam paths
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('tinymce/', include('tinymce.urls')),
     path('', include('library.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('user_profile/', include('user_profile.urls')),
