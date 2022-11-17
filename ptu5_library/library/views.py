@@ -1,11 +1,14 @@
 from django.core.paginator import Paginator
+from django.urls import reverse
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import FormMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 #from django.http import HttpResponse
 from . models import Genre, Author, Book, BookInstance
+from . forms import BookReviewForm
 # Create your views here.
 
 def index(request):
@@ -93,9 +96,37 @@ class BookListView(ListView):#paveldi ListView
         return context#1
 
 
-class BookDetailView(DetailView):
+class BookDetailView(FormMixin, DetailView):
     model = Book
     template_name = 'library/book_detail.html'
+    form_class = BookReviewForm
+
+    def get_success_url(self):
+        return reverse('book', kwargs={'pk': self.get_object().id})
+
+    def post(self, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            messages.error(self.request, "You are posting too much!")
+            return self.form_invalid(form)
+
+    def form_valid(self, form):
+        form.instance.book = self.get_object()
+        form.instance.reader = self.request.user
+        form.save()
+        messages.success(self.request, 'Your review have beed posted')
+        return super().form_valid(form)
+
+    def get_initial(self):
+        return {
+            'book': self.get_object(),
+            'reader': self.request.user,
+        }
+
+    
 
 
 
