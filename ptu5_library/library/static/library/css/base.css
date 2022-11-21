@@ -175,8 +175,10 @@ table {
     justify-self: stretch;
 }
 
-.form-grid input {
-    width: 30%;
+.form-grid input[type="text"], 
+.form-grid input[type="email"], 
+.form-grid input[type="password"] {
+    width: 90%;
 }
 
 .my-books-table {
