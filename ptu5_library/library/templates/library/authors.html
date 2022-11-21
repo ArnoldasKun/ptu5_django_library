@@ -6,9 +6,9 @@
         {% if authors.has_other_pages %}
             {% for page_number in authors.paginator.page_range %}
                 {% if page_number == authors.number %}
-                        <span>{{ page_number }}</span>
-                    {% else %}
-                        <a href="?page={{ page_number }}">{{ page_number }}</a>
+                    <span>{{ page_number }}</span>
+                {% else %}
+                    <a href="?page={{ page_number }}">{{ page_number }}</a>
                 {% endif %}
             {% endfor %}
         {% endif %}
