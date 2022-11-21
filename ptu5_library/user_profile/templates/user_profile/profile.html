@@ -5,7 +5,7 @@
 <div class="flex-profile">
     {% if user.profile and user.profile.photo %}
         <div>
-            <img src="{{ user.profile.proto.url }}" class="user-profile-photo">
+            <img src="{{ user.profile.photo.url }}" class="user-profile-photo">
         </div>
     {% endif %}
     <div class="spacer">
