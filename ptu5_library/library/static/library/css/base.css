@@ -252,3 +252,16 @@ table {
     display: flex;
     place-items: stretch stretch;
 }
+
+.button {
+    background-color: rgb(166, 235, 166);
+    color: #236;
+    border: 1px solid #900;
+    text-decoration: none;
+    border-radius: 0.25rem;
+    padding: 0.25rem;
+}
+
+.button:hover {
+    background-color: #ddd;
+}

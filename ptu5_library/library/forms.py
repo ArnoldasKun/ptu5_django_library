@@ -1,9 +1,8 @@
-from django import forms
+from django import forms 
 from . models import BookReview
 from django.utils.timezone import datetime, timedelta
 
 class BookReviewForm(forms.ModelForm):
-
     def is_valid(self) -> bool:
         valid = super().is_valid()
         if valid:
