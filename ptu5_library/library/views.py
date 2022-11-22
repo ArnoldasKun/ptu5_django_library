@@ -176,3 +176,21 @@ class UserBookInstanceUpdateView(LoginRequiredMixin, UserPassesTestMixin, Update
         else:
             context['action'] = 'Take'
         return context
+
+
+class UserBookInstanceDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = BookInstance
+    template_name = 'library/user_bookinstance_delete.html'
+    success_url = reverse_lazy('user_books')
+
+    def test_func(self):
+        book_instance = self.get_object()
+        return self.request.user == book_instance.reader
+
+    def form_valid(self, form):
+        book_instance = self.get_object()
+        if book_instance.status == 't':
+            messages.success(self.request, 'Book returned and recycled')
+        else:
+            messages.success(self.request, 'Book reservation canceled')
+        return super().form_valid(form)
