@@ -1,8 +1,8 @@
 from django.core.paginator import Paginator
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.edit import FormMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
@@ -47,8 +47,8 @@ def index(request):
     #context - visada trecias argumentas
 
 def authors(request):
-    paginator = Paginator(Author.objects.all(), 2)
-    page_number = request.GET.get('page')
+    paginator = Paginator(Author.objects.all(), 2)#nurodom objects lista ir kiek matosi puslapyje
+    page_number = request.GET.get('page')#pasiemam is request
     paged_authors = paginator.get_page(page_number)
     return render(request, 'library/authors.html', {'authors': paged_authors}) 
 
@@ -65,11 +65,13 @@ class BookListView(ListView):#paveldi ListView
 
     def get_queryset(self):
         queryset = super().get_queryset()#perimam queryset funkc
-        query = self.request.GET.get('query')
+        query = self.request.GET.get('query')#cia darom paieska su query
         if query:
             queryset = queryset.filter(Q(title__icontains=query) | Q(summary__icontains=query))
+            #paieska vykdoma pagal title ir summary
         genre_id = self.request.GET.get('genre_id')#pasiduodam genre per GET parametra
-        #susikuriam genre_id kintamaji, panaudosim filtravimui       
+        #susikuriam genre_id kintamaji, panaudosim filtravimui
+        # i raide nurodo, kad ieskos ir mazasias ir didziasias raides       
         if genre_id:#cia pasitikrinam ar filtruoja
             queryset = queryset.filter(genre__id=genre_id)
             #genre - yra manytomany todel __ naudojami
@@ -127,9 +129,6 @@ class BookDetailView(FormMixin, DetailView):
         }
 
     
-
-
-
 class UserBookListView(LoginRequiredMixin, ListView):
     model = BookInstance
     template_name = 'library/user_book_list.html'
@@ -141,3 +140,13 @@ class UserBookListView(LoginRequiredMixin, ListView):
         return queryset
         
 
+class UserBookInstanceCreateView(LoginRequiredMixin, CreateView):
+    model = BookInstance
+    fields = ('book', 'due_back',)
+    template_name = 'library/user_bookinstance_create.html'
+    success_url = reverse_lazy('user_books')
+
+    def form_valid(self, form):
+        form.instance.reader = self.request.user
+        form.instance.status = 'r'
+        return super().form_valid(form)
