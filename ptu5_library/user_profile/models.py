@@ -7,7 +7,7 @@ class Profile(models.Model):
         get_user_model(),
         verbose_name="user",
         on_delete=models.CASCADE,
-        related_name="profile",
+        related_name="profile",#cia vns, nes 1to1
     )
 
     photo = models.ImageField("photo", upload_to="user_profile/photos", null=True, blank=True)

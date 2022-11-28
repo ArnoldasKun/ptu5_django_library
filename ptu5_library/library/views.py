@@ -107,7 +107,7 @@ class BookDetailView(FormMixin, DetailView):
     def get_success_url(self):
         return reverse('book', kwargs={'pk': self.get_object().id})
 
-    def post(self, *args, **kwargs):
+    def post(self, *args, **kwargs):#susirenkam duomenis is browser
         self.object = self.get_object()
         form = self.get_form()
         if form.is_valid():
@@ -154,12 +154,14 @@ class UserBookInstanceCreateView(LoginRequiredMixin, CreateView):
         messages.success(self.request, _('Book reserved.'))
         return super().form_valid(form)
 
-
+#sukuria forma, pagal musu supildymus
 class UserBookInstanceUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    #salia atsidarom models.py, kad matytume pagal ka rasom
+    #LoginRequiredMixin - kad pasiskolinti knyga, useris turi buti prisijunges
     model = BookInstance
     #fields = ('book', 'due_back',)
     form_class = BookInstanceUpdateForm
-    template_name = 'library/user_bookinstance_form.html'
+    template_name = 'library/user_bookinstance_form.html'#pasiskolinimo forma sukursim template
     success_url = reverse_lazy('user_books')
 
     def form_valid(self, form):
@@ -169,10 +171,12 @@ class UserBookInstanceUpdateView(LoginRequiredMixin, UserPassesTestMixin, Update
         return super().form_valid(form)
 
     def test_func(self):
+        #jeigu ne tas user, turetu ismesti 404 klaida
         book_instance = self.get_object()
         return self.request.user == book_instance.reader
 
     def get_context_data(self, **kwargs):
+        #i formos konteksta galim pasiduoti nauju kintamuju
         context = super().get_context_data(**kwargs)
         context['book_instance'] = self.get_object()
         if context['book_instance'].status == 't':

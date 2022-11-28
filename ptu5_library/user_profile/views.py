@@ -17,10 +17,10 @@ def register(request):
         password = request.POST.get('password')
         password2 = request.POST.get('password2')
         error = False
-        if not username or User.objects.filter(username=username).first():
+        if not username or User.objects.filter(username=username).first():#tikrina username
             messages.error(request, "Username not entered or username already exists.")
             error = True
-        if not email or User.objects.filter(email=email).first():
+        if not email or User.objects.filter(email=email).first():#tikrina email
             messages.error(request, "Email not entered or user with this email already exists")
             error = True
         else:
@@ -29,7 +29,7 @@ def register(request):
             except:
                 messages.error(request, "Invalid email.")
                 error = True
-        if not password or not password2 or password != password2:
+        if not password or not password2 or password != password2:#tikrina passwordus
             messages.error(request, "Passwords not entered, or do not match")
             error = True
         if not error:

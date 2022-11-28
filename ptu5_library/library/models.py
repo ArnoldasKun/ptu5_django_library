@@ -132,6 +132,7 @@ class BookInstance(models.Model):
 class BookReview(models.Model):
     book = models.ForeignKey(Book, verbose_name=_('book'), on_delete=models.CASCADE, related_name='reviews')
     reader = models.ForeignKey(get_user_model(), verbose_name=_('reader'), on_delete=models.CASCADE, related_name='book_reviews')
+    #related_name - kad atiduotu atgal, kas yra su jais susije
     created_at =models.DateTimeField(_('created at'), auto_now_add=True)
     content = models.TextField(_("content"), max_length=10000)
 
